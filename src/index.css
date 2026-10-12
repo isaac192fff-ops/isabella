@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+@layer utilities {
+  /* Fundo rosa com pontos na cor rosa bem definidos e visíveis */
+  .bg-bio-pink {
+    background-color: #f79cb7;
+    background-image: 
+      url("data:image/svg+xml,%3Csvg width='38' height='38' viewBox='0 0 38 38' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='19' cy='19' r='2.7' fill='%23e11d48' fill-opacity='0.45'/%3E%3Ccircle cx='0' cy='0' r='2.7' fill='%23e11d48' fill-opacity='0.45'/%3E%3Ccircle cx='38' cy='0' r='2.7' fill='%23e11d48' fill-opacity='0.45'/%3E%3Ccircle cx='0' cy='38' r='2.7' fill='%23e11d48' fill-opacity='0.45'/%3E%3Ccircle cx='38' cy='38' r='2.7' fill='%23e11d48' fill-opacity='0.45'/%3E%3C/svg%3E"),
+      radial-gradient(ellipse at 50% 35%, #fdb9cc 0%, #f99eb8 50%, #f18ca7 100%);
+    background-position: center center, center center;
+    background-repeat: repeat, no-repeat;
+    background-size: 38px 38px, 100% 100%;
+    background-attachment: fixed;
+  }
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 10px 25px -4px rgba(56, 189, 248, 0.4);
+  }
+  50% {
+    transform: scale(1.015);
+    box-shadow: 0 14px 28px -4px rgba(56, 189, 248, 0.55);
+  }
+}
+
+@keyframes pulseGlowPink {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 10px 25px -4px rgba(244, 63, 94, 0.4);
+  }
+  50% {
+    transform: scale(1.015);
+    box-shadow: 0 14px 28px -4px rgba(244, 63, 94, 0.6);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 2.2s infinite ease-in-out;
+}
+
+.animate-pulse-glow-pink {
+  animation: pulseGlowPink 2.2s infinite ease-in-out;
+}

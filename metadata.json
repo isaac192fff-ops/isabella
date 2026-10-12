@@ -1,0 +1,6 @@
+{
+  "name": "Link na Bio - Julia B.",
+  "description": "Página de link na bio estilo redirecionamento TikTok/Instagram com status online e botão interativo.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
