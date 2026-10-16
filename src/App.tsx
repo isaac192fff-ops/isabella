@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Clock, 
   Sparkles, 
   MoreHorizontal, 
   Compass, 
   HelpCircle,
-  Loader2
+  Crown
 } from 'lucide-react';
 import { TelegramPaperAirplaneOnly } from './components/Icons';
 import userAvatar from './assets/images/user_avatar.jpg';
@@ -33,55 +33,27 @@ export default function App() {
   // Target link (?link=...) and name (?name=...)
   const params = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : new URLSearchParams();
   const targetUrl = params.get('link') || 'https://t.me/isabellaacessoaogrupovip_bot';
+  const targetCrownUrl = params.get('crown') || 'https://www.crownbot.com.br/isabellaa';
   const profileName = params.get('name') || 'Isabella';
 
-  const [progress, setProgress] = useState<number>(0);
-  const [isRedirected, setIsRedirected] = useState<boolean>(false);
-  const redirectedRef = useRef<boolean>(false);
+  const [isWaiting, setIsWaiting] = useState<boolean>(true);
 
-  // Auto redirect effect with smooth loading progress over 7 seconds
+  // Transition from "Aguarde..." to active button without opening automatically
   useEffect(() => {
-    const totalDuration = 7000; // 7 seconds
-    const intervalTime = 50;
-    const step = 100 / (totalDuration / intervalTime);
+    const timer = setTimeout(() => {
+      setIsWaiting(false);
+    }, 2500);
 
-    const timer = setInterval(() => {
-      setProgress((prev) => {
-        const next = prev + step;
-        if (next >= 100) {
-          clearInterval(timer);
-          if (!redirectedRef.current) {
-            redirectedRef.current = true;
-            setIsRedirected(true);
-            // Auto open the link
-            try {
-              window.location.href = targetUrl;
-            } catch (err) {
-              window.open(targetUrl, '_blank');
-            }
-          }
-          return 100;
-        }
-        return next;
-      });
-    }, intervalTime);
-
-    return () => clearInterval(timer);
-  }, [targetUrl]);
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleMainClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    redirectedRef.current = true;
-    setIsRedirected(true);
-    setProgress(100);
-    try {
-      window.location.href = targetUrl;
-    } catch (err) {
-      window.open(targetUrl, '_blank', 'noopener,noreferrer');
+    if (isWaiting) {
+      setIsWaiting(false);
     }
+    window.open(targetUrl, '_blank', 'noopener,noreferrer');
   };
-
-  const isWaiting = progress < 100;
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center p-3 sm:p-4 bg-bio-pink select-none overflow-x-hidden">
@@ -133,17 +105,18 @@ export default function App() {
           </span>
         </div>
 
-        {/* CTA Callout Indicator with loading guidance */}
+        {/* CTA Callout Indicator */}
         <div className="w-full flex items-center justify-center gap-1.5 mb-2.5 text-center">
           <span className="animate-bounce inline-block text-sm">👇</span>
           <span className="text-xs sm:text-[12.5px] font-extrabold uppercase tracking-wide text-pink-600 animate-pulse">
-            {isWaiting ? "Redirecionando automaticamente..." : "Clique abaixo se não abriu sozinho"}
+            {isWaiting ? "Liberando seu acesso exclusivo..." : "Clique no botão abaixo para entrar"}
           </span>
           <span className="animate-bounce inline-block text-sm">👇</span>
         </div>
 
-        {/* Single Action Button with Animated Progress Fill */}
-        <div className="w-full flex flex-col">
+        {/* Action Buttons */}
+        <div className="w-full flex flex-col gap-2.5">
+          {/* Button 1: Telegram */}
           <a
             href={targetUrl}
             target="_blank"
@@ -152,25 +125,17 @@ export default function App() {
             aria-label="Conteúdos Exclusivos (Telegram) 🔥"
             className={`w-full h-[52px] sm:h-[54px] rounded-[22px] px-4 font-bold flex items-center justify-center gap-2.5 transition-all duration-300 cursor-pointer select-none relative overflow-hidden active:scale-[0.98] ${
               isWaiting 
-                ? 'bg-[#3ca7e7] text-white shadow-[0_8px_20px_-3px_rgba(56,189,248,0.45)]'
+                ? 'bg-gradient-to-r from-[#44b0ea] via-[#4cb7ef] to-[#3ca7e7] text-white shadow-[0_8px_20px_-3px_rgba(56,189,248,0.4)]'
                 : 'bg-gradient-to-r from-[#0284c7] via-[#38bdf8] to-[#0284c7] bg-[length:200%_auto] animate-pulse-glow text-white shadow-[0_12px_28px_-3px_rgba(56,189,248,0.6)] ring-2 ring-sky-300/60'
             }`}
           >
-            {/* Visual Loading Progress Bar Fill inside the button */}
-            {isWaiting && (
-              <div 
-                className="absolute left-0 top-0 bottom-0 bg-white/25 transition-all ease-linear"
-                style={{ width: `${progress}%`, transitionDuration: '50ms' }}
-              />
-            )}
-
             {/* White Circular Badge */}
-            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white flex items-center justify-center shadow-xs shrink-0 relative z-10">
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white flex items-center justify-center shadow-xs shrink-0">
               <TelegramPaperAirplaneOnly className="w-4 h-4 text-[#3ca7e7] -translate-x-[0.5px] -translate-y-[0.5px]" />
             </div>
 
             {/* Button Text & Loading Status */}
-            <div className="relative z-10 flex items-center gap-2">
+            <div className="flex items-center gap-2">
               {isWaiting ? (
                 <>
                   <div className="w-4 h-4 rounded-full border-2 border-white/40 border-t-white animate-spin shrink-0" />
@@ -184,6 +149,24 @@ export default function App() {
                 </span>
               )}
             </div>
+          </a>
+
+          {/* Button 2: Plataforma VIP */}
+          <a
+            href={targetCrownUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Acesso VIP (Plataforma) 👑"
+            className="w-full h-[52px] sm:h-[54px] rounded-[22px] px-4 font-bold flex items-center justify-center gap-2.5 transition-all duration-300 cursor-pointer select-none relative overflow-hidden active:scale-[0.98] bg-gradient-to-r from-[#f43f5e] via-[#fb7185] to-[#f43f5e] text-white shadow-[0_10px_25px_-3px_rgba(244,63,94,0.45)] hover:brightness-105 border border-pink-300/40"
+          >
+            {/* White Circular Badge with Crown icon */}
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white flex items-center justify-center shadow-xs shrink-0">
+              <Crown className="w-4 h-4 text-[#f43f5e] stroke-[2.2]" />
+            </div>
+
+            <span className="text-[13.5px] sm:text-[15px] font-extrabold text-white tracking-wide uppercase flex items-center gap-1">
+              Acesso VIP (Plataforma) 👑
+            </span>
           </a>
         </div>
 
